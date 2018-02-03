@@ -1,3 +1,7 @@
+"""
+Note: this model requires the use of the Stanford GloVe word embeddings found here: https://nlp.stanford.edu/projects/glove/
+"""
+
 import numpy as np
 import pandas as pd
 
