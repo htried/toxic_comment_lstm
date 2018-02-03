@@ -20,7 +20,7 @@ test = pd.read_csv("test.csv")
 
 # fill in null values to make keras not grumble
 filled_train = train["comment_text"].fillna("unknown").values
-# filled_test = test["comment_text"].fillna("unknown").values
+filled_test = test["comment_text"].fillna("unknown").values
 list_classes = ["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"]
 y = train[list_classes].values
 
@@ -31,9 +31,9 @@ tokenizer.fit_on_texts(list(filled_train))
 
 # convert these texts to tokenized sequences of words in order to pad them and make them the same size
 tokenized_train = tokenizer.texts_to_sequences(filled_train) 
-# tokenized_test = tokenizer.texts_to_sequences(filled_test)
+tokenized_test = tokenizer.texts_to_sequences(filled_test)
 padded_train = pad_sequences(tokenized_train, maxlen=maxlen)
-# padded_test = pad_sequences(tokenized_test, maxlen=maxlen)
+padded_test = pad_sequences(tokenized_test, maxlen=maxlen)
 
 # using the GloVe word vector representations to get more accurate fits...
 def get_glove_coefs(word, *arr):
@@ -64,16 +64,6 @@ for word, i in word_index.items():
 		embedding_matrix[i] = embedding_vector
 
 print "embedding matrix created with glove coefficients"
-
-# inp = Input(shape=(maxlen,))
-# x = Embedding(max_features, embed_size, weights=[embedding_matrix])(inp)
-# x = Bidirectional(LSTM(50, return_sequences=True, dropout=0.1, recurrent_dropout=0.1))(x)
-# x = LSTM(50)(x)
-# x = GlobalMaxPool1D()(x)
-# x = Dense(50, activation="relu")(x)
-# x = Dropout(0.1)(x)
-# x = Dense(6, activation="sigmoid")(x)
-# model = Model(inputs=inp, outputs=x)
 
 model = Sequential()
 model.add(Embedding(max_features, embed_size, weights=[embedding_matrix], input_shape=(maxlen,)))
